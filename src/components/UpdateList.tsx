@@ -32,11 +32,11 @@ export function UpdateList({ updates, locale, stats }: UpdateListProps) {
   return (
     <div className="space-y-8">
       {/* 統計サマリー */}
-      <div className="grid grid-cols-4 gap-3">
-        <StatCard label="Total" value={stats.total} color="bg-gray-100 dark:bg-gray-800" textColor="text-gray-700 dark:text-gray-300" />
-        <StatCard label="Breaking" value={stats.breaking} color="bg-red-50 dark:bg-red-900/20" textColor="text-red-600" />
-        <StatCard label="New" value={stats.newFeature} color="bg-yellow-50 dark:bg-yellow-900/20" textColor="text-yellow-600" />
-        <StatCard label="Info" value={stats.improvement} color="bg-green-50 dark:bg-green-900/20" textColor="text-green-600" />
+      <div className="grid grid-cols-4 gap-3" role="group" aria-label={t("statsGroup")}>
+        <StatCard label={t("statTotal")} value={stats.total} color="bg-gray-100 dark:bg-gray-800" textColor="text-gray-700 dark:text-gray-300" />
+        <StatCard label={t("statBreaking")} value={stats.breaking} color="bg-red-50 dark:bg-red-900/20" textColor="text-red-600" />
+        <StatCard label={t("statNew")} value={stats.newFeature} color="bg-yellow-50 dark:bg-yellow-900/20" textColor="text-yellow-600" />
+        <StatCard label={t("statInfo")} value={stats.improvement} color="bg-green-50 dark:bg-green-900/20" textColor="text-green-600" />
       </div>
 
       {/* セクション別アップデート */}

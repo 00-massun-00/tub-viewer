@@ -8,6 +8,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { PeriodSelector } from "@/components/PeriodSelector";
 import { SearchBar } from "@/components/SearchBar";
 import { ExportButton } from "@/components/ExportButton";
+import { ReasoningTrace, ReasoningData } from "@/components/ReasoningTrace";
 
 type ViewMode = "browse" | "search";
 
@@ -26,6 +27,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const [parsedInfo, setParsedInfo] = useState<{ products: string[]; severity: string | null; period: string | null; source: string | null } | null>(null);
+  const [reasoningData, setReasoningData] = useState<ReasoningData | null>(null);
+  const [briefingSummary, setBriefingSummary] = useState<string | null>(null);
 
   const t = (key: string) => UI_TEXT[key]?.[locale] || UI_TEXT[key]?.["en"] || key;
 
@@ -66,6 +69,14 @@ export default function Home() {
       setStats(data.stats || { breaking: 0, newFeature: 0, improvement: 0, total: 0 });
       setSearchSuggestions(data.suggestions || []);
       setParsedInfo(data.parsed || null);
+      setReasoningData({
+        reasoning: data.reasoning,
+        queryAnalysis: data.queryAnalysis,
+        searchSources: data.searchSources,
+        ranking: data.ranking,
+        evaluation: data.evaluation,
+      });
+      setBriefingSummary(data.briefingSummary?.summary || null);
       setGeneratedAt(data.generatedAt || new Date().toISOString());
     } catch (error) {
       console.error("Search failed:", error);
@@ -81,7 +92,13 @@ export default function Home() {
     setSearchQuery("");
     setSearchSuggestions([]);
     setParsedInfo(null);
+    setReasoningData(null);
   }, []);
+
+  // Sync html[lang] attribute with locale for accessibility
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   useEffect(() => {
     if (selectedProduct && viewMode === "browse") {
@@ -151,7 +168,7 @@ export default function Home() {
                           {t("searchResults")}
                         </h2>
                         <button
-                          onClick={() => { setViewMode("browse"); setSearchQuery(""); setParsedInfo(null); setSearchSuggestions([]); setUpdates([]); }}
+                          onClick={() => { setViewMode("browse"); setSearchQuery(""); setParsedInfo(null); setReasoningData(null); setBriefingSummary(null); setSearchSuggestions([]); setUpdates([]); }}
                           className="text-xs text-blue-500 hover:text-blue-700 hover:underline"
                         >
                           ✕ {t("clear")}
@@ -197,6 +214,26 @@ export default function Home() {
                     </div>
                   )}
                 </div>
+
+                {/* Reasoning Trace Panel */}
+                {reasoningData && (
+                  <ReasoningTrace data={reasoningData} locale={locale} />
+                )}
+
+                {/* AI Briefing Summary */}
+                {briefingSummary && !loading && (
+                  <div className="mb-4 p-3 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-100 dark:border-blue-800/40">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-xs">✨</span>
+                      <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                        AI Briefing Summary
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                      {briefingSummary}
+                    </p>
+                  </div>
+                )}
 
                 {loading ? (
                   <div className="flex flex-col items-center justify-center py-20">

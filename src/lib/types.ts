@@ -346,4 +346,24 @@ export const UI_TEXT: Record<string, Record<SupportedLocale, string>> = {
     de: "Zur Kenntnisnahme überprüfen.",
     pt: "Revise para fins informativos.",
   },
+  statTotal: {
+    ja: "合計", en: "Total", ko: "합계", zh: "合计",
+    es: "Total", fr: "Total", de: "Gesamt", pt: "Total",
+  },
+  statBreaking: {
+    ja: "要対応", en: "Breaking", ko: "조치필요", zh: "重大",
+    es: "Crítico", fr: "Critique", de: "Kritisch", pt: "Crítico",
+  },
+  statNew: {
+    ja: "新機能", en: "New", ko: "신규", zh: "新功能",
+    es: "Nuevo", fr: "Nouveau", de: "Neu", pt: "Novo",
+  },
+  statInfo: {
+    ja: "情報", en: "Info", ko: "정보", zh: "信息",
+    es: "Info", fr: "Info", de: "Info", pt: "Info",
+  },
+  statsGroup: {
+    ja: "アップデート統計", en: "Update Statistics", ko: "업데이트 통계", zh: "更新统计",
+    es: "Estadísticas", fr: "Statistiques", de: "Statistiken", pt: "Estatísticas",
+  },
 };

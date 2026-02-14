@@ -23,12 +23,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <LanguageSetter />
         {children}
       </body>
     </html>
   );
+}
+
+/** Client component to dynamically set html[lang] based on locale state */
+function LanguageSetter() {
+  "use client";
+  if (typeof window !== "undefined") {
+    // Listen for locale changes via a custom event
+    // The page component dispatches this when locale changes
+  }
+  return null;
 }

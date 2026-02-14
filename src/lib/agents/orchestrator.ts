@@ -18,6 +18,7 @@ import { executeQueryAgent, QueryAgentOutput } from "./query-agent";
 import { executeSearchAgent, SearchAgentOutput } from "./search-agent";
 import { executeRankingAgent, RankingAgentOutput, RankedResult } from "./ranking-agent";
 import { executeEvaluator, EvaluationResult } from "./evaluator";
+import { generateBriefingSummary, BriefingSummaryResult } from "./briefing-summary";
 import { createLogger, generateRequestId } from "../logger";
 
 const logger = createLogger("Orchestrator");
@@ -63,6 +64,7 @@ export interface OrchestratorOutput {
     topRelevance: number;
   };
   evaluation?: EvaluationResult;
+  briefingSummary?: BriefingSummaryResult;
 
   // Search metadata
   query: string;
@@ -214,6 +216,17 @@ export async function executeSearch(input: OrchestratorInput): Promise<Orchestra
     pipelineSteps: pipelineSteps.length,
   });
 
+  // ── Step 5: Briefing Summary ──
+  const briefingSummary = await generateBriefingSummary(updates, input.locale, input.query);
+  pipelineSteps.push({
+    agent: "BriefingSummary",
+    status: "success",
+    durationMs: briefingSummary.durationMs,
+    details: `Method: ${briefingSummary.method}, Length: ${briefingSummary.summary.length}`,
+  });
+
+  const finalTotalDurationMs = Date.now() - startTime;
+
   return {
     updates,
     stats,
@@ -221,7 +234,7 @@ export async function executeSearch(input: OrchestratorInput): Promise<Orchestra
       requestId,
       pipeline: "multi-agent-orchestrator",
       steps: pipelineSteps,
-      totalDurationMs,
+      totalDurationMs: finalTotalDurationMs,
       queryMethod: queryResult.method,
       reasoningSteps,
     },
@@ -235,6 +248,7 @@ export async function executeSearch(input: OrchestratorInput): Promise<Orchestra
       topRelevance: rankingResult.topRelevance,
     },
     evaluation,
+    briefingSummary,
     query: input.query,
     parsed: queryResult.parsed,
     suggestions: [],

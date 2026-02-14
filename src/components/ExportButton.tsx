@@ -111,6 +111,9 @@ export function ExportButton({ productId, searchQuery, locale, hasData }: Export
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-label={t("export")}
         className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
       >
         {/* Download icon */}
@@ -125,9 +128,10 @@ export function ExportButton({ productId, searchQuery, locale, hasData }: Export
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-30 overflow-hidden">
+        <div role="menu" aria-label={t("export")} className="absolute right-0 mt-1 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-30 overflow-hidden">
           {/* Excel */}
           <button
+            role="menuitem"
             onClick={() => handleExport("excel")}
             disabled={downloading !== null}
             className="w-full text-left px-4 py-3 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors border-b border-gray-100 dark:border-gray-700 disabled:opacity-50"
@@ -152,6 +156,7 @@ export function ExportButton({ productId, searchQuery, locale, hasData }: Export
 
           {/* PowerPoint */}
           <button
+            role="menuitem"
             onClick={() => handleExport("pptx")}
             disabled={downloading !== null}
             className="w-full text-left px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors disabled:opacity-50"

@@ -112,6 +112,10 @@ export function SearchBar({ onSearch, suggestions, loading, locale }: SearchBarP
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => setShowExamples(true)}
               placeholder={PLACEHOLDER[locale]}
+              aria-label={SEARCH_LABEL[locale]}
+              aria-autocomplete="list"
+              role="combobox"
+              aria-expanded={showExamples && !query}
               className="w-full pl-9 pr-4 py-2.5 text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400 transition-shadow shadow-sm hover:shadow"
             />
             {query && (
@@ -145,7 +149,7 @@ export function SearchBar({ onSearch, suggestions, loading, locale }: SearchBarP
 
       {/* 検索例ドロップダウン */}
       {showExamples && !query && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-30 overflow-hidden">
+        <div role="listbox" aria-label={locale === "ja" ? "クエリ例" : "Example queries"} className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-30 overflow-hidden">
           <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
             <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
               {locale === "ja" ? "クエリ例" : "Examples"}
@@ -155,6 +159,7 @@ export function SearchBar({ onSearch, suggestions, loading, locale }: SearchBarP
             {(EXAMPLE_QUERIES[locale] || EXAMPLE_QUERIES.en).map((example, i) => (
               <button
                 key={i}
+                role="option"
                 onClick={() => handleExampleClick(example)}
                 className="w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 text-gray-700 dark:text-gray-300 transition-colors flex items-center gap-2"
               >

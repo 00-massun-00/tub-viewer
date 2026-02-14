@@ -20,7 +20,27 @@ https://github.com/00-massun-00/tub-viewer
 
 ### Project Description
 
-TUB Viewer is a multilingual web app for tracking Microsoft technology updates across Azure, Dynamics 365, Microsoft 365, Power Platform, and Security products. It features NLP-powered natural language search (supporting Japanese and English queries), Microsoft Learn MCP integration for real-time documentation updates, and export capabilities to both Excel and PowerPoint. The app categorizes updates into 3 severity levels (Breaking Changes, New Features, Improvements) with color-coded cards, and supports 8 languages. Built entirely with GitHub Copilot Agent Mode in VS Code.
+TUB Viewer is a multilingual web app for tracking Microsoft technology updates across Azure, Dynamics 365, Microsoft 365, Power Platform, and Security products.
+
+**Multi-Agent Architecture (Orchestrator-Workers Pattern)**:
+The app employs a 4-agent pipeline — QueryAgent → SearchAgent → RankingAgent → EvaluatorAgent — coordinated by a central Orchestrator. Each agent has a single responsibility and communicates via typed interfaces.
+
+**Chain-of-Thought Reasoning**:
+Natural language queries are analyzed through a 5-step CoT pipeline (Intent Classification → Entity Extraction → Query Expansion → Confidence Scoring → Reasoning Summary) powered by GPT-4o, with graceful fallback to rule-based parsing when LLM is unavailable.
+
+**Self-Reflection & Evaluator-Optimizer Loop**:
+After search results are ranked, an Evaluator agent performs quality assessment. If results fall below the confidence threshold, it automatically rewrites the query and re-executes the pipeline (max 1 retry), implementing the evaluator-optimizer workflow pattern.
+
+**Key Features**:
+
+- Microsoft Learn MCP integration for real-time documentation updates with retry & exponential backoff
+- Zod input validation on all API routes with structured error responses
+- Structured JSON logging with request ID tracing for full observability
+- Security headers (X-Content-Type-Options, X-Frame-Options, CSP-related, Permissions-Policy)
+- Export to Excel (3-sheet workbook) and PowerPoint (16:9 presentation)
+- 8-language support (Japanese, English, Spanish, French, German, Chinese, Korean, Portuguese)
+- 54 unit tests (Vitest) covering all core modules
+- Built entirely with GitHub Copilot Agent Mode in VS Code
 
 ### Demo Video or Screenshots
 
@@ -64,12 +84,16 @@ TypeScript/JavaScript
 ### Key Technologies Used
 
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4
+- Multi-Agent Orchestrator-Workers Architecture (4 specialized agents)
+- OpenAI GPT-4o (Chain-of-Thought reasoning with 5-step analysis pipeline)
 - @modelcontextprotocol/sdk (MCP SDK for Microsoft Learn integration)
 - Microsoft Learn Search API (real-time documentation updates)
+- Zod (input validation on all API routes)
+- Vitest (54 unit tests with coverage)
+- Structured JSON logging with request ID tracing
 - ExcelJS (Excel export with filters and color-coding)
 - PptxGenJS (PowerPoint presentation generation)
-- Lucide React (icons)
-- Rule-based NLP query parser (Japanese + English)
+- Self-Reflection Evaluator-Optimizer loop (automatic query rewrite)
 
 ### Submission Requirements
 
@@ -81,7 +105,15 @@ TypeScript/JavaScript
 
 ### Technical Highlights
 
-The app integrates Microsoft Learn search API via @modelcontextprotocol/sdk to fetch real documentation updates and merge them with Message Center-style mock data, demonstrating practical MCP integration. The NLP query parser handles Japanese morphological patterns (stop word removal for particles and compound words) to enable natural language search without requiring an LLM. The dual-format export system generates professional Excel workbooks with auto-filters and severity-based color coding, alongside 16:9 PowerPoint presentations with stat cards and detail slides, all server-side rendered via Next.js API routes.
+**Multi-Agent Orchestrator Pipeline**: The search system uses an Orchestrator-Workers pattern with 4 specialized agents (QueryAgent, SearchAgent, RankingAgent, EvaluatorAgent). The Orchestrator coordinates the pipeline: query analysis → parallel multi-source search → relevance-based ranking → quality evaluation with self-reflection retry.
+
+**Chain-of-Thought Reasoning**: Natural language queries pass through a 5-step CoT pipeline powered by GPT-4o: Intent Classification → Entity Extraction → Query Expansion → Confidence Scoring → Reasoning Summary. Each step produces a typed `ReasoningStep` with explicit rationale, creating a full reasoning trace. Falls back gracefully to rule-based parsing when LLM is unavailable.
+
+**Self-Reflection Evaluator-Optimizer Loop**: After ranking, the EvaluatorAgent assesses result quality (count ≥ 3, average relevance ≥ 0.5). If quality is insufficient, it rewrites the query using LLM and re-executes the entire pipeline (max 1 retry), implementing the evaluator-optimizer workflow pattern.
+
+**Reliability & Safety**: All API routes use Zod schema validation with structured error responses. External API calls use retry with exponential backoff (max 2 retries). Security headers applied globally. Structured JSON logging with request ID tracing enables full observability. 54 unit tests (Vitest) cover core modules.
+
+**MCP Integration**: Microsoft Learn Search API integrated via @modelcontextprotocol/sdk with retry mechanism, fetching real documentation updates and merging with Message Center data. The SearchAgent performs parallel queries across multiple data sources.
 
 ### Quick Setup Summary
 
