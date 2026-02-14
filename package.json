@@ -11,9 +11,12 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
     "exceljs": "^4.4.0",
+    "gif-encoder-2": "^1.0.5",
     "lucide-react": "^0.564.0",
     "next": "16.1.6",
     "openai": "^6.22.0",
+    "playwright": "^1.58.2",
+    "pngjs": "^7.0.0",
     "pptxgenjs": "^4.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"

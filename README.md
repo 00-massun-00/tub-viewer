@@ -9,29 +9,37 @@ Built with **GitHub Copilot** at [Agents League @ TechConnect](https://github.co
 ## ✨ Features
 
 ### 🔍 Dual-Mode Navigation
+
 - **Browse Mode** — Select a product from the sidebar to view categorized updates
 - **Search Mode** — Natural language queries like "今月のアップデート情報教えて" or "Azure breaking changes"
 
 ### 🌐 8-Language Support
+
 Japanese, English, Korean, Chinese, Spanish, French, German, Portuguese — all UI text dynamically switches.
 
 ### 📊 Smart Categorization
+
 Updates are auto-classified into 3 severity levels:
+
 - 🔴 **Breaking Changes / Retirements** — Immediate action required
 - 🟡 **New Features / Changes** — Review recommended
 - 🟢 **Improvements / Enhancements** — Informational
 
 ### 📤 Export to Excel & PowerPoint
+
 - **Excel (.xlsx)** — 3-sheet workbook with summary, full update list (with filters & color-coding), and a dedicated Breaking Changes sheet
 - **PowerPoint (.pptx)** — 16:9 presentation with title slide (stat cards), severity sections, and per-update detail cards
 
 ### 🔗 MCP Integration (Model Context Protocol)
+
 - **Microsoft Learn API** — Fetches real documentation updates from learn.microsoft.com
 - Mock data from **Message Center** patterns (ready for WorkIQ MCP integration)
 - Uses `@modelcontextprotocol/sdk` for MCP client connectivity
 
 ### 🤖 NLP Query Parser
+
 Rule-based natural language understanding for queries in Japanese and English:
+
 - Product detection: "Azure", "D365", "Power Platform", etc.
 - Period detection: "今月", "last week", "3ヶ月"
 - Severity detection: "breaking", "新機能"
@@ -81,6 +89,7 @@ npm run dev
 ```
 
 ### Prerequisites
+
 - Node.js 18+
 - npm 9+
 
@@ -88,15 +97,15 @@ npm run dev
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 |
-| MCP SDK | @modelcontextprotocol/sdk |
-| Excel Export | ExcelJS |
-| PowerPoint Export | PptxGenJS |
-| Icons | Lucide React |
+| Layer             | Technology                |
+| ----------------- | ------------------------- |
+| Framework         | Next.js 16 (App Router)   |
+| Language          | TypeScript                |
+| Styling           | Tailwind CSS 4            |
+| MCP SDK           | @modelcontextprotocol/sdk |
+| Excel Export      | ExcelJS                   |
+| PowerPoint Export | PptxGenJS                 |
+| Icons             | Lucide React              |
 
 ---
 
@@ -151,11 +160,11 @@ This entire project was built using **GitHub Copilot in Agent Mode** within VS C
 
 **Track 1: 🎨 Creative Apps — GitHub Copilot**
 
-| Criteria | How This Project Addresses It |
-|----------|------------------------------|
-| **GitHub Copilot Usage** | Entire app built with Copilot Agent Mode |
-| **Creative App** | Multi-lingual TUB viewer with NLP search + export |
-| **MCP Integration** | Microsoft Learn API via MCP SDK; ready for WorkIQ |
+| Criteria                 | How This Project Addresses It                     |
+| ------------------------ | ------------------------------------------------- |
+| **GitHub Copilot Usage** | Entire app built with Copilot Agent Mode          |
+| **Creative App**         | Multi-lingual TUB viewer with NLP search + export |
+| **MCP Integration**      | Microsoft Learn API via MCP SDK; ready for WorkIQ |
 
 ---
 
