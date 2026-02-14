@@ -4,11 +4,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchLearnDocs, learnResultToUpdateItem } from "@/lib/mcp-client";
 import { PRODUCTS } from "@/lib/products";
+import { SupportedLocale } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q") || "";
   const product = searchParams.get("product") || "";
+  const locale = (searchParams.get("locale") || "en") as SupportedLocale;
   const maxResults = parseInt(searchParams.get("max") || "10");
 
   if (!query && !product) {
@@ -30,7 +32,8 @@ export async function GET(req: NextRequest) {
       learnResultToUpdateItem(
         r,
         productInfo?.name || product || "General",
-        productInfo?.family || "Other"
+        productInfo?.family || "Other",
+        locale
       )
     );
 

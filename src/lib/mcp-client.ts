@@ -4,7 +4,7 @@
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { UpdateItem, ProductFamily } from "@/lib/types";
+import { UpdateItem, ProductFamily, SupportedLocale, UI_TEXT } from "@/lib/types";
 
 /** MCP 接続のシングルトン管理 */
 let learnClient: Client | null = null;
@@ -113,7 +113,9 @@ export function learnResultToUpdateItem(
   result: LearnSearchResult,
   product: string,
   family: ProductFamily,
+  locale: SupportedLocale = "en",
 ): UpdateItem {
+  const tl = (key: string) => UI_TEXT[key]?.[locale] || UI_TEXT[key]?.["en"] || key;
   // タイトルから重要度を推定
   const titleLower = result.title.toLowerCase();
   let severity: UpdateItem["severity"] = "improvement";
@@ -130,12 +132,12 @@ export function learnResultToUpdateItem(
     product,
     productFamily: family,
     summary: result.description,
-    impact: `Microsoft Learn ドキュメントの更新。詳細は ${result.url} を参照。`,
+    impact: `${tl("learnDocUpdate")} ${tl("seeDetailsAt").replace("%s", result.url)}`,
     actionRequired: severity === "breaking"
-      ? "影響を確認し、移行計画を策定してください。"
+      ? tl("actionBreaking")
       : severity === "new-feature"
-      ? "新機能を確認し、活用可能か検討してください。"
-      : "情報として確認してください。",
+      ? tl("actionNewFeature")
+      : tl("actionInfo"),
     source: "microsoft-learn",
     sourceId: result.url.split("/").pop() || "",
     sourceUrl: result.url,

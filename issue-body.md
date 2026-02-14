@@ -73,11 +73,11 @@ TypeScript/JavaScript
 
 ### Submission Requirements
 
-- [X] My project meets the track-specific challenge requirements
-- [X] My repository includes a README.md with setup instructions
-- [X] My code does not contain hardcoded API keys or secrets
-- [X] I have included demo materials (video or screenshots)
-- [X] My project is my own work created during this hackathon
+- [x] My project meets the track-specific challenge requirements
+- [x] My repository includes a README.md with setup instructions
+- [x] My code does not contain hardcoded API keys or secrets
+- [x] I have included demo materials (video or screenshots)
+- [x] My project is my own work created during this hackathon
 
 ### Technical Highlights
 

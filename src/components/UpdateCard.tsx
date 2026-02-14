@@ -12,19 +12,19 @@ const SEVERITY_STYLES = {
     border: "border-l-4 border-red-500",
     bg: "bg-red-50 dark:bg-red-900/20",
     badge: "bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300",
-    badgeText: "🔴 要対応",
+    badgeKey: "badgeBreaking",
   },
   "new-feature": {
     border: "border-l-4 border-yellow-500",
     bg: "bg-yellow-50 dark:bg-yellow-900/20",
     badge: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300",
-    badgeText: "🟡 確認推奨",
+    badgeKey: "badgeNewFeature",
   },
   improvement: {
     border: "border-l-4 border-green-500",
     bg: "bg-green-50 dark:bg-green-900/20",
     badge: "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300",
-    badgeText: "🟢 情報",
+    badgeKey: "badgeImprovement",
   },
 };
 
@@ -40,7 +40,7 @@ export function UpdateCard({ update, locale }: UpdateCardProps) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <h3 className="font-semibold text-sm leading-snug flex-1">{update.title}</h3>
         <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${style.badge}`}>
-          {style.badgeText}
+          {t(style.badgeKey)}
         </span>
       </div>
 
@@ -99,7 +99,7 @@ export function UpdateCard({ update, locale }: UpdateCardProps) {
             rel="noopener noreferrer"
             className="text-[10px] text-blue-500 hover:text-blue-700 hover:underline"
           >
-            詳細 →
+            {t("details")}
           </a>
         )}
         {update.date && (

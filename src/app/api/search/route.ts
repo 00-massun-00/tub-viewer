@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { parseQuery, searchUpdates } from "@/lib/query-parser";
+import { SupportedLocale } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const parsed = parseQuery(query);
-    const result = searchUpdates(parsed);
+    const result = searchUpdates(parsed, locale as SupportedLocale);
 
     return NextResponse.json({
       ...result,

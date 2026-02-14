@@ -2,7 +2,7 @@
 // ユーザーの自然言語問い合わせを解析し、製品・期間・キーワード等にマッピング
 // Phase 2: LLM で解析。現在はルールベース
 
-import { UpdateItem } from "./types";
+import { UpdateItem, SupportedLocale } from "./types";
 import { MOCK_UPDATES } from "./mock-data";
 import { PRODUCTS } from "./products";
 
@@ -119,7 +119,7 @@ function getAllUpdates(): UpdateItem[] {
 }
 
 /** 解析結果に基づいてアップデートを検索 */
-export function searchUpdates(parsed: ParsedQuery): SearchResult {
+export function searchUpdates(parsed: ParsedQuery, locale: SupportedLocale = "ja"): SearchResult {
   let results: UpdateItem[];
 
   // 製品が特定された場合はその製品のデータ
@@ -169,7 +169,7 @@ export function searchUpdates(parsed: ParsedQuery): SearchResult {
   };
 
   // サジェスション生成
-  const suggestions = generateSuggestions(parsed, results);
+  const suggestions = generateSuggestions(parsed, results, locale);
 
   return {
     query: parsed.originalQuery,
@@ -181,27 +181,47 @@ export function searchUpdates(parsed: ParsedQuery): SearchResult {
 }
 
 /** クエリに関連するサジェスションを生成 */
-function generateSuggestions(parsed: ParsedQuery, results: UpdateItem[]): string[] {
+function generateSuggestions(parsed: ParsedQuery, results: UpdateItem[], locale: SupportedLocale): string[] {
   const suggestions: string[] = [];
+  const isJa = locale === "ja";
 
   if (results.length === 0) {
-    suggestions.push("Azure の最新アップデートを教えて");
-    suggestions.push("D365 の Breaking Changes は？");
-    suggestions.push("今月の全製品アップデート");
+    if (isJa) {
+      suggestions.push("Azure の最新アップデートを教えて");
+      suggestions.push("D365 の Breaking Changes は？");
+      suggestions.push("今月の全製品アップデート");
+    } else {
+      suggestions.push("Show me the latest Azure updates");
+      suggestions.push("D365 breaking changes");
+      suggestions.push("All product updates this month");
+    }
   } else {
     // 結果に関連する追加クエリを提案
     const families = [...new Set(results.map((u) => u.productFamily))];
     if (!parsed.severity) {
-      suggestions.push(`${families[0]} の Breaking Changes だけ見せて`);
+      suggestions.push(
+        isJa
+          ? `${families[0]} の Breaking Changes だけ見せて`
+          : `${families[0]} breaking changes only`
+      );
     }
     if (parsed.products.length <= 1) {
       const otherProducts = PRODUCTS.filter((p) => !parsed.products.includes(p.id));
       if (otherProducts.length > 0) {
-        suggestions.push(`${otherProducts[0].name} のアップデートも確認`);
+        const displayName = isJa ? otherProducts[0].name : (otherProducts[0].nameEn || otherProducts[0].name);
+        suggestions.push(
+          isJa
+            ? `${otherProducts[0].name} のアップデートも確認`
+            : `Also check ${displayName} updates`
+        );
       }
     }
     if (!parsed.source) {
-      suggestions.push("Message Center の通知だけ表示");
+      suggestions.push(
+        isJa
+          ? "Message Center の通知だけ表示"
+          : "Show Message Center notifications only"
+      );
     }
   }
 

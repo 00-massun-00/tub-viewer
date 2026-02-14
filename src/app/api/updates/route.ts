@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getMockUpdates } from "@/lib/mock-data";
-import { UpdatesResponse, UpdateItem } from "@/lib/types";
+import { UpdatesResponse, UpdateItem, SupportedLocale } from "@/lib/types";
 import { searchLearnDocs, learnResultToUpdateItem } from "@/lib/mcp-client";
 import { PRODUCTS } from "@/lib/products";
 
@@ -30,7 +30,8 @@ export async function GET(request: NextRequest) {
           learnResultToUpdateItem(
             r,
             productInfo?.name || productId,
-            productInfo?.family || "Other"
+            productInfo?.family || "Other",
+            (locale as SupportedLocale) || "en"
           )
         );
       } catch (learnError) {

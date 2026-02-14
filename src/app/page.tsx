@@ -148,13 +148,13 @@ export default function Home() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h2 className="text-lg font-bold">
-                          {locale === "ja" ? "検索結果" : "Search Results"}
+                          {t("searchResults")}
                         </h2>
                         <button
                           onClick={() => { setViewMode("browse"); setSearchQuery(""); setParsedInfo(null); setSearchSuggestions([]); setUpdates([]); }}
                           className="text-xs text-blue-500 hover:text-blue-700 hover:underline"
                         >
-                          ✕ {locale === "ja" ? "クリア" : "Clear"}
+                          ✕ {t("clear")}
                         </button>
                       </div>
                       <p className="text-sm text-gray-500 mt-0.5">
@@ -175,7 +175,7 @@ export default function Home() {
                         const p = products.find((pr) => pr.id === pid);
                         return (
                           <span key={pid} className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 rounded-full">
-                            📦 {p?.name || pid}
+                            📦 {locale === "ja" ? (p?.name || pid) : (p?.nameEn || p?.name || pid)}
                           </span>
                         );
                       })}
@@ -216,14 +216,19 @@ export default function Home() {
                 <p className="text-lg font-medium mb-1">{t("selectProduct")}</p>
                 <p className="text-xs mb-6">Message Center + Microsoft Learn</p>
                 <p className="text-sm text-gray-400 mb-2">
-                  {locale === "ja" ? "または上の検索バーから自然言語で検索" : "Or search using natural language above"}
+                  {t("orSearchAbove")}
                 </p>
                 <div className="flex flex-wrap justify-center gap-2 max-w-md">
-                  {[
-                    locale === "ja" ? "今月のアップデート情報教えて" : "Show me this month's updates",
-                    locale === "ja" ? "Azure の Breaking Changes" : "Azure breaking changes",
-                    locale === "ja" ? "D365 の新機能は？" : "What's new in D365?",
-                  ].map((q) => (
+                  {({
+                    ja: ["今月のアップデート情報教えて", "Azure の Breaking Changes", "D365 の新機能は？"],
+                    en: ["Show me this month's updates", "Azure breaking changes", "What's new in D365?"],
+                    ko: ["이번 달 업데이트 알려줘", "Azure Breaking Changes", "D365 새로운 기능?"],
+                    zh: ["显示本月更新", "Azure 重大变更", "D365 新功能?"],
+                    es: ["Actualizaciones de este mes", "Azure breaking changes", "¿Novedades en D365?"],
+                    fr: ["Mises à jour ce mois", "Azure breaking changes", "Nouveautés D365 ?"],
+                    de: ["Updates diesen Monat", "Azure Breaking Changes", "Was ist neu in D365?"],
+                    pt: ["Atualizações deste mês", "Azure breaking changes", "Novidades no D365?"],
+                  }[locale] || ["Show me this month's updates", "Azure breaking changes", "What's new in D365?"]).map((q) => (
                     <button
                       key={q}
                       onClick={() => handleSearch(q)}
@@ -239,7 +244,7 @@ export default function Home() {
               <>
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h2 className="text-lg font-bold">{selectedProductInfo?.name}</h2>
+                    <h2 className="text-lg font-bold">{locale === "ja" ? selectedProductInfo?.name : (selectedProductInfo?.nameEn || selectedProductInfo?.name)}</h2>
                     {generatedAt && (
                       <p className="text-[10px] text-gray-400 mt-0.5">
                         Generated: {new Date(generatedAt).toLocaleString(locale)}

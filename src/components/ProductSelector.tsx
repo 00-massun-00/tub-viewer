@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Product } from "@/lib/types";
+import { Product, SupportedLocale } from "@/lib/types";
 import { FAMILY_CONFIG } from "@/lib/products";
 
 interface ProductSelectorProps {
   products: Product[];
   selectedProduct: string | null;
   onSelect: (productId: string) => void;
-  locale: string;
+  locale: SupportedLocale;
 }
 
 export function ProductSelector({
   products,
   selectedProduct,
   onSelect,
+  locale,
 }: ProductSelectorProps) {
   const [expandedFamily, setExpandedFamily] = useState<string | null>(null);
 
@@ -72,9 +73,11 @@ export function ProductSelector({
                     }`}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{product.name}</div>
+                      <div className="font-medium text-sm truncate">{locale === "ja" ? product.name : (product.nameEn || product.name)}</div>
                       {product.description && (
-                        <div className="text-xs text-gray-500 mt-0.5 truncate">{product.description}</div>
+                        <div className="text-xs text-gray-500 mt-0.5 truncate">
+                          {locale === "ja" ? product.description : (product.descriptionEn || product.description)}
+                        </div>
                       )}
                     </div>
                     <div className="flex gap-1 flex-shrink-0">
