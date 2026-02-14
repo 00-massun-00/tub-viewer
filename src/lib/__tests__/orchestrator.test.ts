@@ -34,6 +34,7 @@ vi.mock("../agents/search-agent", () => ({
       },
     ],
     learnResults: [],
+    workiqResults: [],
     mergedResults: [
       {
         id: "mock-1",
@@ -48,7 +49,7 @@ vi.mock("../agents/search-agent", () => ({
         date: new Date().toISOString(),
       },
     ],
-    sourceCounts: { mockData: 1, learnApi: 0, total: 1 },
+    sourceCounts: { mockData: 1, learnApi: 0, workiq: 0, total: 1 },
     durationMs: 10,
   }),
 }));

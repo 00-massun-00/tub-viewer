@@ -57,6 +57,7 @@ export interface OrchestratorOutput {
   searchSources: {
     mockData: number;
     learnApi: number;
+    workiq: number;
     total: number;
   };
   ranking: {
@@ -128,7 +129,7 @@ export async function executeSearch(input: OrchestratorInput): Promise<Orchestra
     agent: "SearchAgent",
     status: "success",
     durationMs: searchResult.durationMs,
-    details: `Mock: ${searchResult.sourceCounts.mockData}, Learn: ${searchResult.sourceCounts.learnApi}, Merged: ${searchResult.sourceCounts.total}`,
+    details: `Mock: ${searchResult.sourceCounts.mockData}, Learn: ${searchResult.sourceCounts.learnApi}, WorkIQ: ${searchResult.sourceCounts.workiq}, Merged: ${searchResult.sourceCounts.total}`,
   });
 
   // ── Step 3: RankingAgent — Score and rank results ──

@@ -44,6 +44,7 @@ export interface ReasoningData {
   searchSources?: {
     mockData: number;
     learnApi: number;
+    workiq: number;
     total: number;
   };
   ranking?: {
@@ -287,6 +288,9 @@ export function ReasoningTrace({ data, locale }: ReasoningTraceProps) {
                   </div>
                   <div className="text-[10px] text-gray-600 dark:text-gray-400">
                     🌐 Learn: <span className="font-medium">{searchSources.learnApi}</span>
+                  </div>
+                  <div className="text-[10px] text-gray-600 dark:text-gray-400">
+                    🏢 WorkIQ: <span className="font-medium">{searchSources.workiq ?? 0}</span>
                   </div>
                   <div className="text-[10px] text-gray-600 dark:text-gray-400 font-medium">
                     = {searchSources.total} {locale === "ja" ? "件取得" : "total"}

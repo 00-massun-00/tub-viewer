@@ -39,7 +39,7 @@ A collapsible panel visualizes the entire multi-agent pipeline: pipeline step ba
 
 **Key Features**:
 
-- Microsoft Learn MCP integration for real-time documentation updates with retry & exponential backoff
+- Microsoft Learn MCP + WorkIQ MCP integration for real-time documentation and M365 tenant data with retry & exponential backoff
 - Zod input validation on all API routes with structured error responses
 - Structured JSON logging with request ID tracing for full observability
 - Security headers (X-Content-Type-Options, X-Frame-Options, CSP-related, Permissions-Policy)
@@ -98,7 +98,8 @@ TypeScript/JavaScript
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4
 - Multi-Agent Orchestrator-Workers Architecture (5 specialized agents)
 - OpenAI GPT-4o (Chain-of-Thought reasoning + AI Briefing Summary)
-- @modelcontextprotocol/sdk (MCP SDK for Microsoft Learn integration)
+- @modelcontextprotocol/sdk (MCP SDK for Microsoft Learn + WorkIQ integration)
+- @microsoft/workiq (WorkIQ MCP server for M365 tenant data)
 - Microsoft Learn Search API (real-time documentation updates)
 - Zod (input validation on all API routes)
 - Vitest (84 unit tests with coverage across 9 test files)
@@ -135,7 +136,7 @@ TypeScript/JavaScript
 
 **Accessibility**: WCAG-compliant ARIA patterns including combobox (search), listbox (suggestions), menu (export), role groups (stats). Dynamic `html[lang]` sync via useEffect for screen reader locale detection.
 
-**MCP Integration**: Microsoft Learn Search API integrated via @modelcontextprotocol/sdk with retry mechanism, fetching real documentation updates and merging with Message Center data. The SearchAgent performs parallel queries across multiple data sources.
+**MCP Integration**: The SearchAgent queries 3 data sources in parallel: (1) Mock Data (Message Center patterns), (2) Microsoft Learn Search API via MCP SDK, and (3) WorkIQ MCP for M365 tenant data (emails, Message Center feed, field advisories). Both MCP connections use @modelcontextprotocol/sdk with stdio transport, singleton management, retry with exponential backoff, and timeout protection. Results are deduplicated before ranking.
 
 ### Quick Setup Summary
 

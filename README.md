@@ -111,11 +111,13 @@ Updates are auto-classified into 3 severity levels:
 
 ### 🔗 MCP Integration Pipeline (Model Context Protocol)
 
-- **Microsoft Learn API** — Fetches real documentation updates from learn.microsoft.com via MCP integration pipeline
-- Mock data from **Message Center** patterns (ready for WorkIQ MCP integration)
-- Uses `@modelcontextprotocol/sdk` for MCP client connectivity
+- **Microsoft Learn API** — Fetches real documentation updates from learn.microsoft.com via MCP SDK
+- **WorkIQ MCP** — Connects to M365 tenant data (Message Center, emails, advisories) via `@microsoft/workiq` MCP server
+- Mock data from **Message Center** patterns (fallback when MCP sources unavailable)
+- Uses `@modelcontextprotocol/sdk` (stdio transport) for both MCP clients
+- **3 data sources** searched in parallel: Mock Data + Learn API + WorkIQ
 - **Retry with exponential backoff** — External API calls retry up to 2 times (1s, 2s delay)
-- **Timeout protection** — 10-second AbortSignal timeout on all external calls
+- **Timeout protection** — 10-second AbortSignal, 15-second WorkIQ timeout
 
 ---
 
@@ -392,9 +394,9 @@ This entire project was built using **GitHub Copilot in Agent Mode** within VS C
 | **Accuracy & Relevance**            | Real-time Learn API + date-filtered results + relevance scoring + reasoning trace UI        |
 | **Reasoning & Multi-step Thinking** | 5-step Chain-of-Thought, multi-agent orchestration, evaluator-optimizer loop, visible in UI |
 | **Creativity & Originality**        | AI Briefing Summary, Reasoning Trace visualization, multi-lingual TUB viewer                |
-| **UX & Presentation**               | Polished UI, skeleton loader, keyboard shortcuts, a11y (ARIA), reasoning panel            |
-| **Reliability & Safety**            | 84 tests, Zod validation, rate limiting, error boundary, security headers, logging, retry |
-| **MCP Integration**                 | Microsoft Learn API via MCP integration pipeline; ready for WorkIQ                          |
+| **UX & Presentation**               | Polished UI, skeleton loader, keyboard shortcuts, a11y (ARIA), reasoning panel              |
+| **Reliability & Safety**            | 84 tests, Zod validation, rate limiting, error boundary, security headers, logging, retry   |
+| **MCP Integration**                 | Microsoft Learn API + WorkIQ MCP (M365 tenant data) via @modelcontextprotocol/sdk           |
 
 ---
 

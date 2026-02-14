@@ -17,7 +17,7 @@ export interface Product {
   family: ProductFamily;
   description?: string;
   descriptionEn?: string;
-  sources: ("message-center" | "microsoft-learn")[];
+  sources: ("message-center" | "microsoft-learn" | "workiq")[];
 }
 
 /** アップデートの重要度カテゴリ */
@@ -37,7 +37,7 @@ export interface UpdateItem {
   impactEn?: string;
   actionRequired: string;
   actionRequiredEn?: string;
-  source: "message-center" | "microsoft-learn";
+  source: "message-center" | "microsoft-learn" | "workiq";
   sourceId?: string; // MC ID or Learn URL
   sourceUrl?: string;
   date?: string;
@@ -365,5 +365,25 @@ export const UI_TEXT: Record<string, Record<SupportedLocale, string>> = {
   statsGroup: {
     ja: "アップデート統計", en: "Update Statistics", ko: "업데이트 통계", zh: "更新统计",
     es: "Estadísticas", fr: "Statistiques", de: "Statistiken", pt: "Estatísticas",
+  },
+  workiqSource: {
+    ja: "WorkIQ (M365テナント) から取得したデータです。",
+    en: "Data retrieved from WorkIQ (M365 tenant).",
+    ko: "WorkIQ(M365 테넌트)에서 가져온 데이터입니다.",
+    zh: "来自 WorkIQ (M365 租户) 的数据。",
+    es: "Datos obtenidos de WorkIQ (inquilino M365).",
+    fr: "Données récupérées depuis WorkIQ (locataire M365).",
+    de: "Daten aus WorkIQ (M365-Mandant) abgerufen.",
+    pt: "Dados obtidos do WorkIQ (locatário M365).",
+  },
+  noDescription: {
+    ja: "詳細情報はありません。",
+    en: "No description available.",
+    ko: "설명이 없습니다.",
+    zh: "暂无详细信息。",
+    es: "No hay descripción disponible.",
+    fr: "Aucune description disponible.",
+    de: "Keine Beschreibung verfügbar.",
+    pt: "Nenhuma descrição disponível.",
   },
 };
