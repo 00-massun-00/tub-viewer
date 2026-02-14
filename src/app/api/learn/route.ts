@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Learn search error:", error);
     return NextResponse.json(
-      { error: "Failed to search Microsoft Learn", details: String(error) },
+      { error: "Failed to search Microsoft Learn", message: "External API error" },
       { status: 500 }
     );
   }

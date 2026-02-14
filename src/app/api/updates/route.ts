@@ -100,7 +100,10 @@ function filterByPeriod(updates: UpdateItem[], period: string): UpdateItem[] {
       cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   }
 
-  // モックデータは日付が過去のものも含むので、全件返す（デモ用）
-  // 実際の MCP 連携時は cutoff でフィルタリング
-  return updates;
+  // Filter updates by cutoff date
+  return updates.filter((u) => {
+    if (!u.date) return true; // Include items without dates
+    const itemDate = new Date(u.date);
+    return itemDate >= cutoff;
+  });
 }

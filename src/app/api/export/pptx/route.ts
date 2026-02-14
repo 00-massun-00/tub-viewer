@@ -250,7 +250,7 @@ export async function GET(req: NextRequest) {
 
   const filename = `TUB_Report_${new Date().toISOString().slice(0, 10)}.pptx`;
 
-  return new NextResponse(pptxBuffer as Buffer, {
+  return new NextResponse(new Uint8Array(pptxBuffer as Buffer), {
     headers: {
       "Content-Type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
       "Content-Disposition": `attachment; filename="${filename}"`,

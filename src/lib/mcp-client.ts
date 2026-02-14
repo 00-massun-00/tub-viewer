@@ -28,7 +28,34 @@ async function getLearnClient(): Promise<Client> {
   return learnClient;
 }
 
-/** Microsoft Learn のドキュメントを検索 */
+/**
+ * Fetch with exponential backoff retry.
+ * Retries on network errors and 5xx responses.
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries: number = 2
+): Promise<Response> {
+  let lastError: Error | null = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (res.ok || res.status < 500) return res;
+      // Server error — retry with backoff
+      lastError = new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+    }
+    if (attempt < maxRetries) {
+      const delay = Math.pow(2, attempt) * 1000; // 1s, 2s
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+  throw lastError || new Error("fetchWithRetry failed");
+}
+
+/** Microsoft Learn のドキュメントを検索 (with retry & timeout) */
 export async function searchLearnDocs(
   query: string,
   product?: string,
@@ -39,12 +66,14 @@ export async function searchLearnDocs(
     const searchQuery = product ? `${product} ${query}` : query;
     const url = `https://learn.microsoft.com/api/search?search=${encodeURIComponent(searchQuery)}&locale=en-us&$top=${maxResults}&facet=products`;
 
-    const res = await fetch(url, {
-      headers: {
-        "Accept": "application/json",
+    const res = await fetchWithRetry(
+      url,
+      {
+        headers: { "Accept": "application/json" },
+        signal: AbortSignal.timeout(10000),
       },
-      signal: AbortSignal.timeout(10000),
-    });
+      2 // max 2 retries with exponential backoff
+    );
 
     if (!res.ok) {
       console.warn(`Learn API returned ${res.status}`);
@@ -62,7 +91,7 @@ export async function searchLearnDocs(
 
     return results;
   } catch (error) {
-    console.error("Learn search error:", error);
+    console.error("Learn search error (after retries):", error);
     return [];
   }
 }
