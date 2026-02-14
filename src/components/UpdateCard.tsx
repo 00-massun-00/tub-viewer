@@ -31,6 +31,11 @@ const SEVERITY_STYLES = {
 export function UpdateCard({ update, locale }: UpdateCardProps) {
   const style = SEVERITY_STYLES[update.severity];
   const t = (key: string) => UI_TEXT[key]?.[locale] || UI_TEXT[key]?.["en"] || key;
+  const isJa = locale === "ja";
+  const title = isJa ? update.title : (update.titleEn || update.title);
+  const summary = isJa ? update.summary : (update.summaryEn || update.summary);
+  const impact = isJa ? update.impact : (update.impactEn || update.impact);
+  const actionReq = isJa ? update.actionRequired : (update.actionRequiredEn || update.actionRequired);
 
   return (
     <div
@@ -38,14 +43,14 @@ export function UpdateCard({ update, locale }: UpdateCardProps) {
     >
       {/* ヘッダー */}
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="font-semibold text-sm leading-snug flex-1">{update.title}</h3>
+        <h3 className="font-semibold text-sm leading-snug flex-1">{title}</h3>
         <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${style.badge}`}>
           {t(style.badgeKey)}
         </span>
       </div>
 
       {/* サマリー */}
-      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">{update.summary}</p>
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">{summary}</p>
 
       {/* 詳細 */}
       <div className="space-y-2 text-xs">
@@ -54,7 +59,7 @@ export function UpdateCard({ update, locale }: UpdateCardProps) {
           <span className="font-semibold text-gray-500 dark:text-gray-400 w-24 flex-shrink-0">
             {t("impact")}
           </span>
-          <span className="text-gray-700 dark:text-gray-300">{update.impact}</span>
+          <span className="text-gray-700 dark:text-gray-300">{impact}</span>
         </div>
 
         {/* 必要なアクション */}
@@ -62,7 +67,7 @@ export function UpdateCard({ update, locale }: UpdateCardProps) {
           <span className="font-semibold text-gray-500 dark:text-gray-400 w-24 flex-shrink-0">
             {t("actionRequired")}
           </span>
-          <span className="text-gray-700 dark:text-gray-300">{update.actionRequired}</span>
+          <span className="text-gray-700 dark:text-gray-300">{actionReq}</span>
         </div>
 
         {/* 期限 */}

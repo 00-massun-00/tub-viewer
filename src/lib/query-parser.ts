@@ -140,11 +140,11 @@ export function searchUpdates(parsed: ParsedQuery, locale: SupportedLocale = "ja
     results = results.filter((u) => u.source === parsed.source);
   }
 
-  // キーワードフィルタ（タイトル・サマリー・影響範囲に含まれるか）
+  // キーワードフィルタ（タイトル・サマリー・影響範囲に含まれるか — 日英両方を検索）
   if (parsed.keywords.length > 0) {
     const keywordsLower = parsed.keywords.map((k) => k.toLowerCase());
     results = results.filter((u) => {
-      const text = `${u.title} ${u.summary} ${u.impact} ${u.product} ${u.actionRequired}`.toLowerCase();
+      const text = `${u.title} ${u.titleEn || ""} ${u.summary} ${u.summaryEn || ""} ${u.impact} ${u.impactEn || ""} ${u.product} ${u.actionRequired} ${u.actionRequiredEn || ""}`.toLowerCase();
       return keywordsLower.some((kw) => text.includes(kw));
     });
   }

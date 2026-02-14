@@ -27,12 +27,16 @@ export type UpdateSeverity = "breaking" | "new-feature" | "improvement";
 export interface UpdateItem {
   id: string;
   title: string;
+  titleEn?: string;
   severity: UpdateSeverity;
   product: string;
   productFamily: ProductFamily;
   summary: string;
+  summaryEn?: string;
   impact: string;
+  impactEn?: string;
   actionRequired: string;
+  actionRequiredEn?: string;
   source: "message-center" | "microsoft-learn";
   sourceId?: string; // MC ID or Learn URL
   sourceUrl?: string;
