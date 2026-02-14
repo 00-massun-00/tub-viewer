@@ -23,13 +23,19 @@ https://github.com/00-massun-00/tub-viewer
 TUB Viewer is a multilingual web app for tracking Microsoft technology updates across Azure, Dynamics 365, Microsoft 365, Power Platform, and Security products.
 
 **Multi-Agent Architecture (Orchestrator-Workers Pattern)**:
-The app employs a 4-agent pipeline — QueryAgent → SearchAgent → RankingAgent → EvaluatorAgent — coordinated by a central Orchestrator. Each agent has a single responsibility and communicates via typed interfaces.
+The app employs a 5-agent pipeline — QueryAgent → SearchAgent → RankingAgent → EvaluatorAgent → BriefingSummaryAgent — coordinated by a central Orchestrator. Each agent has a single responsibility and communicates via typed interfaces.
 
 **Chain-of-Thought Reasoning**:
 Natural language queries are analyzed through a 5-step CoT pipeline (Intent Classification → Entity Extraction → Query Expansion → Confidence Scoring → Reasoning Summary) powered by GPT-4o, with graceful fallback to rule-based parsing when LLM is unavailable.
 
 **Self-Reflection & Evaluator-Optimizer Loop**:
 After search results are ranked, an Evaluator agent performs quality assessment. If results fall below the confidence threshold, it automatically rewrites the query and re-executes the pipeline (max 1 retry), implementing the evaluator-optimizer workflow pattern.
+
+**AI Briefing Summary**:
+A 5th agent (BriefingSummaryAgent) generates locale-aware executive summaries of search results using GPT-4o, with rule-based fallback. Summaries are displayed as a gradient "AI Briefing" card at the top of search results.
+
+**Reasoning Trace UI**:
+A collapsible panel visualizes the entire multi-agent pipeline: pipeline step badges (success/fallback/skipped), CoT reasoning steps with confidence bars, data source breakdown, relevance score bars, evaluation pass/fail scores, and request ID. Fully localized in 8 languages.
 
 **Key Features**:
 
@@ -39,7 +45,8 @@ After search results are ranked, an Evaluator agent performs quality assessment.
 - Security headers (X-Content-Type-Options, X-Frame-Options, CSP-related, Permissions-Policy)
 - Export to Excel (3-sheet workbook) and PowerPoint (16:9 presentation)
 - 8-language support (Japanese, English, Spanish, French, German, Chinese, Korean, Portuguese)
-- 54 unit tests (Vitest) covering all core modules
+- WCAG accessibility (ARIA combobox, listbox, menu patterns; dynamic html[lang])
+- 79 unit tests (Vitest) covering all core modules including agent layer
 - Built entirely with GitHub Copilot Agent Mode in VS Code
 
 ### Demo Video or Screenshots
@@ -84,13 +91,15 @@ TypeScript/JavaScript
 ### Key Technologies Used
 
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS 4
-- Multi-Agent Orchestrator-Workers Architecture (4 specialized agents)
-- OpenAI GPT-4o (Chain-of-Thought reasoning with 5-step analysis pipeline)
+- Multi-Agent Orchestrator-Workers Architecture (5 specialized agents)
+- OpenAI GPT-4o (Chain-of-Thought reasoning + AI Briefing Summary)
 - @modelcontextprotocol/sdk (MCP SDK for Microsoft Learn integration)
 - Microsoft Learn Search API (real-time documentation updates)
 - Zod (input validation on all API routes)
-- Vitest (54 unit tests with coverage)
+- Vitest (79 unit tests with coverage across 8 test files)
 - Structured JSON logging with request ID tracing
+- Reasoning Trace UI (pipeline visualization with confidence bars)
+- WCAG Accessibility (ARIA combobox, listbox, menu, dynamic lang)
 - ExcelJS (Excel export with filters and color-coding)
 - PptxGenJS (PowerPoint presentation generation)
 - Self-Reflection Evaluator-Optimizer loop (automatic query rewrite)
@@ -105,13 +114,17 @@ TypeScript/JavaScript
 
 ### Technical Highlights
 
-**Multi-Agent Orchestrator Pipeline**: The search system uses an Orchestrator-Workers pattern with 4 specialized agents (QueryAgent, SearchAgent, RankingAgent, EvaluatorAgent). The Orchestrator coordinates the pipeline: query analysis → parallel multi-source search → relevance-based ranking → quality evaluation with self-reflection retry.
+**Multi-Agent Orchestrator Pipeline**: The search system uses an Orchestrator-Workers pattern with 5 specialized agents (QueryAgent, SearchAgent, RankingAgent, EvaluatorAgent, BriefingSummaryAgent). The Orchestrator coordinates the pipeline: query analysis → parallel multi-source search → relevance-based ranking → quality evaluation with self-reflection retry → AI briefing summary generation.
 
 **Chain-of-Thought Reasoning**: Natural language queries pass through a 5-step CoT pipeline powered by GPT-4o: Intent Classification → Entity Extraction → Query Expansion → Confidence Scoring → Reasoning Summary. Each step produces a typed `ReasoningStep` with explicit rationale, creating a full reasoning trace. Falls back gracefully to rule-based parsing when LLM is unavailable.
 
 **Self-Reflection Evaluator-Optimizer Loop**: After ranking, the EvaluatorAgent assesses result quality (count ≥ 3, average relevance ≥ 0.5). If quality is insufficient, it rewrites the query using LLM and re-executes the entire pipeline (max 1 retry), implementing the evaluator-optimizer workflow pattern.
 
-**Reliability & Safety**: All API routes use Zod schema validation with structured error responses. External API calls use retry with exponential backoff (max 2 retries). Security headers applied globally. Structured JSON logging with request ID tracing enables full observability. 54 unit tests (Vitest) cover core modules.
+**Reasoning Trace & Transparency**: The Reasoning Trace UI panel visualizes every pipeline step in real-time — CoT reasoning steps with confidence bars, data source breakdown (Mock/Learn), relevance score distribution, evaluation pass/fail with score %, and request ID. Fully localized in 8 languages. This makes the agent's decision process fully transparent to users.
+
+**Reliability & Safety**: All API routes use Zod schema validation with structured error responses. External API calls use retry with exponential backoff (max 2 retries). Security headers applied globally. Structured JSON logging with request ID tracing enables full observability. 79 unit tests (Vitest) across 8 test files cover all core modules including agent layer (ranking, evaluator, orchestrator).
+
+**Accessibility**: WCAG-compliant ARIA patterns including combobox (search), listbox (suggestions), menu (export), role groups (stats). Dynamic `html[lang]` sync via useEffect for screen reader locale detection.
 
 **MCP Integration**: Microsoft Learn Search API integrated via @modelcontextprotocol/sdk with retry mechanism, fetching real documentation updates and merging with Message Center data. The SearchAgent performs parallel queries across multiple data sources.
 
