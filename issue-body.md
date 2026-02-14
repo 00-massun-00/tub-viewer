@@ -30,30 +30,30 @@ TUB Viewer is a multilingual web app for tracking Microsoft technology updates a
 
 #### Screenshots (English UI)
 
-**1. Home Page — Product Selection**
+**1. Home Page — Product Selection (English)**
 Users select from 21 products across 6 families (Azure, Dynamics 365, Microsoft 365, Power Platform, Security). Supports 8 languages.
 
-![Home Page](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/01_home_english.png)
+![Home Page](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/01_home_en.png)
 
-**2. Azure Compute — Update List**
-Updates from Message Center + Microsoft Learn with severity stats (Total, Breaking, New, Info).
+**2. Azure (General) — Update List (English)**
+Updates from Message Center + Microsoft Learn with severity stats (Total, Breaking, New, Info). All card content (titles, summaries, impact, actions) fully localized.
 
-![Azure Compute Updates](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/02_azure_compute_english.png)
+![Azure Browse Updates](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/02_browse_en.png)
 
-**3. NLP Search — "Azure breaking changes"**
-Natural language query parsed into product + severity filters. Results show AKS Kubernetes 1.28 retirement.
+**3. Search Suggestions (English)**
+Localized search suggestions dropdown with 8 example queries.
 
-![Search Results](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/03_search_breaking_english.png)
+![Search Dropdown](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/03_search_dropdown_en.png)
 
-**4. Export Menu — Excel & PowerPoint**
+**4. Search Results — "Azure Breaking Changes" (English)**
+Natural language query parsed into product + severity filters. Results show AKS Kubernetes 1.28 retirement with English card content.
+
+![Search Results](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/04_search_results_en.png)
+
+**5. Export Menu — Excel & PowerPoint (English)**
 One-click export to Excel (3-sheet workbook) or PowerPoint (16:9 presentation).
 
-![Export Menu](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/04_export_menu_english.png)
-
-**5. Dynamics 365 F&O — Breaking Changes & New Features**
-D365 updates with 2 breaking changes, 3 new features, 5 informational items.
-
-![D365 F&O](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/05_d365_fo_english.png)
+![Export Menu](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/05_export_en.png)
 
 Repository: https://github.com/00-massun-00/tub-viewer
 
