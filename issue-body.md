@@ -46,7 +46,12 @@ A collapsible panel visualizes the entire multi-agent pipeline: pipeline step ba
 - Export to Excel (3-sheet workbook) and PowerPoint (16:9 presentation)
 - 8-language support (Japanese, English, Spanish, French, German, Chinese, Korean, Portuguese)
 - WCAG accessibility (ARIA combobox, listbox, menu patterns; dynamic html[lang])
-- 79 unit tests (Vitest) covering all core modules including agent layer
+- Keyboard shortcuts (/ to focus search, Esc to clear)
+- React Error Boundary with graceful fallback UI
+- API rate limiting (30 req/min per IP with 429 + Retry-After)
+- Skeleton loader for loading states
+- GitHub Actions CI (lint + typecheck + test + build on Node 20/22)
+- 84 unit tests (Vitest) covering all core modules including agent layer
 - Built entirely with GitHub Copilot Agent Mode in VS Code
 
 ### Demo Video or Screenshots
@@ -96,10 +101,14 @@ TypeScript/JavaScript
 - @modelcontextprotocol/sdk (MCP SDK for Microsoft Learn integration)
 - Microsoft Learn Search API (real-time documentation updates)
 - Zod (input validation on all API routes)
-- Vitest (79 unit tests with coverage across 8 test files)
+- Vitest (84 unit tests with coverage across 9 test files)
 - Structured JSON logging with request ID tracing
 - Reasoning Trace UI (pipeline visualization with confidence bars)
-- WCAG Accessibility (ARIA combobox, listbox, menu, dynamic lang)
+- WCAG Accessibility (ARIA combobox, listbox, menu, keyboard shortcuts, dynamic lang)
+- React Error Boundary (graceful crash recovery)
+- API Rate Limiting (sliding-window, 30 req/min per IP)
+- Skeleton Loader (loading state UX)
+- GitHub Actions CI (Node 20/22 matrix)
 - ExcelJS (Excel export with filters and color-coding)
 - PptxGenJS (PowerPoint presentation generation)
 - Self-Reflection Evaluator-Optimizer loop (automatic query rewrite)
@@ -122,7 +131,7 @@ TypeScript/JavaScript
 
 **Reasoning Trace & Transparency**: The Reasoning Trace UI panel visualizes every pipeline step in real-time — CoT reasoning steps with confidence bars, data source breakdown (Mock/Learn), relevance score distribution, evaluation pass/fail with score %, and request ID. Fully localized in 8 languages. This makes the agent's decision process fully transparent to users.
 
-**Reliability & Safety**: All API routes use Zod schema validation with structured error responses. External API calls use retry with exponential backoff (max 2 retries). Security headers applied globally. Structured JSON logging with request ID tracing enables full observability. 79 unit tests (Vitest) across 8 test files cover all core modules including agent layer (ranking, evaluator, orchestrator).
+**Reliability & Safety**: All API routes use Zod schema validation with structured error responses. API rate limiting (30 req/min per IP) with 429 responses and Retry-After headers. React Error Boundary catches rendering crashes with friendly fallback UI. External API calls use retry with exponential backoff (max 2 retries). Security headers applied globally. Structured JSON logging with request ID tracing enables full observability. 84 unit tests (Vitest) across 9 test files cover all core modules including agent layer (ranking, evaluator, orchestrator, rate-limiter). GitHub Actions CI runs lint + typecheck + test + build on Node 20/22 matrix.
 
 **Accessibility**: WCAG-compliant ARIA patterns including combobox (search), listbox (suggestions), menu (export), role groups (stats). Dynamic `html[lang]` sync via useEffect for screen reader locale detection.
 

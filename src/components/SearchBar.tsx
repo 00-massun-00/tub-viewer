@@ -78,6 +78,25 @@ export function SearchBar({ onSearch, suggestions, loading, locale }: SearchBarP
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
+  // キーボードショートカット: "/" で検索フォーカス, "Escape" でクリア
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // "/" で検索にフォーカス（入力中でなければ）
+      if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+      // Escape でクリア＆閉じる
+      if (e.key === "Escape" && document.activeElement === inputRef.current) {
+        setQuery("");
+        setShowExamples(false);
+        inputRef.current?.blur();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {

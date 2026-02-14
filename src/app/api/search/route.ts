@@ -7,6 +7,7 @@ import { SupportedLocale } from "@/lib/types";
 import { executeSearch } from "@/lib/agents/orchestrator";
 import { SearchQuerySchema, validateSearchParams, validationErrorResponse } from "@/lib/validators";
 import { createLogger, generateRequestId } from "@/lib/logger";
+import { searchRateLimiter, getClientId } from "@/lib/rate-limiter";
 
 const logger = createLogger("SearchRoute");
 
@@ -14,6 +15,20 @@ export async function GET(request: NextRequest) {
   const requestId = generateRequestId();
   const routeLogger = logger.withRequestId(requestId);
   const startTime = Date.now();
+
+  // ── Rate limiting ──
+  const clientId = getClientId(request);
+  const rateResult = searchRateLimiter.check(clientId);
+  if (!rateResult.allowed) {
+    routeLogger.warn("Rate limit exceeded", { clientId, retryAfterMs: rateResult.retryAfterMs });
+    return NextResponse.json(
+      { error: "Too many requests", retryAfterMs: rateResult.retryAfterMs },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(rateResult.retryAfterMs / 1000)) },
+      }
+    );
+  }
 
   // ── Input validation (Zod) ──
   const validation = validateSearchParams(SearchQuerySchema, request.nextUrl.searchParams);

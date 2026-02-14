@@ -1,13 +1,15 @@
 # TUB Viewer — Technology Update Briefing
 
+[![CI](https://github.com/00-massun-00/tub-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/00-massun-00/tub-viewer/actions/workflows/ci.yml)
+
 > **A multilingual, multi-agent AI web app for tracking Microsoft technology updates across Azure, Dynamics 365, Microsoft 365, Power Platform, and Security — powered by Chain-of-Thought reasoning and MCP integration pipeline.**
 
 Built with **GitHub Copilot** at [Agents League @ TechConnect](https://github.com/microsoft/agentsleague-techconnect) hackathon.
 
 ![TUB Viewer Demo](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/demo.gif)
 
-| Home Page | Search Results | Export Menu |
-|-----------|---------------|-------------|
+| Home Page                                                                                            | Search Results                                                                                                   | Export Menu                                                                                              |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | ![Home](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/01_home_en.png) | ![Search](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/04_search_results_en.png) | ![Export](https://raw.githubusercontent.com/00-massun-00/tub-viewer/master/screenshots/05_export_en.png) |
 
 ---
@@ -48,14 +50,14 @@ graph TD
 
 The search pipeline uses a **multi-agent orchestrator** following Anthropic's "Building Effective Agents" guidance:
 
-| Agent              | Responsibility                                                       | Pattern               |
-| ------------------ | -------------------------------------------------------------------- | --------------------- |
-| **QueryAgent**     | Query analysis via LLM Chain-of-Thought or rule-based fallback       | Single Responsibility |
-| **SearchAgent**    | Parallel multi-source search (Mock Data + Learn API)                 | Parallelization       |
-| **RankingAgent**   | Relevance scoring & re-ranking with keyword/recency/severity weights | Scoring Pipeline      |
-| **EvaluatorAgent** | Quality check + self-reflection query rewrite (max 1 retry)          | Evaluator-Optimizer   |
-| **BriefingSummary** | AI-powered executive summary of results (LLM or rule-based)       | Summarization         |
-| **Orchestrator**   | Coordinates all agents, manages pipeline flow                        | Orchestrator-Workers  |
+| Agent               | Responsibility                                                       | Pattern               |
+| ------------------- | -------------------------------------------------------------------- | --------------------- |
+| **QueryAgent**      | Query analysis via LLM Chain-of-Thought or rule-based fallback       | Single Responsibility |
+| **SearchAgent**     | Parallel multi-source search (Mock Data + Learn API)                 | Parallelization       |
+| **RankingAgent**    | Relevance scoring & re-ranking with keyword/recency/severity weights | Scoring Pipeline      |
+| **EvaluatorAgent**  | Quality check + self-reflection query rewrite (max 1 retry)          | Evaluator-Optimizer   |
+| **BriefingSummary** | AI-powered executive summary of results (LLM or rule-based)          | Summarization         |
+| **Orchestrator**    | Coordinates all agents, manages pipeline flow                        | Orchestrator-Workers  |
 
 Each agent has typed `Input`/`Output` interfaces, follows SRP (Single Responsibility Principle), and includes structured logging with request ID tracing.
 
@@ -203,7 +205,7 @@ Configuration is centralized in `src/lib/config.ts` with type-safe accessors, va
 
 ## 🧪 Testing
 
-Comprehensive test suite using **Vitest** with 79 test cases across 8 test files:
+Comprehensive test suite using **Vitest** with 84 test cases across 9 test files:
 
 ```bash
 # Run all tests
@@ -228,6 +230,7 @@ npm run test:coverage
 | `ranking-agent.test.ts` | 9     | Relevance scoring, keyword/product/severity match, recency bonus      |
 | `evaluator.test.ts`     | 8     | Quality assessment, pass/fail logic, score bounds, LLM fallback       |
 | `orchestrator.test.ts`  | 8     | Pipeline coordination, agent output aggregation, reasoning trace      |
+| `rate-limiter.test.ts`  | 5     | Sliding-window rate limiting, per-client tracking, default config     |
 
 ---
 
@@ -255,6 +258,8 @@ All API endpoints validate inputs using Zod schemas:
 
 ### Error Handling & Resilience
 
+- **React Error Boundary** — Catches rendering crashes and displays a friendly fallback UI with retry button
+- **API Rate Limiting** — Sliding-window rate limiter (30 req/min per IP) on search API with 429 responses and Retry-After headers
 - **Retry with exponential backoff** — External API calls retry up to 2 times (1s → 2s)
 - **Graceful degradation** — LLM unavailable → rule-based fallback; Learn API fails → mock data only
 - **Timeout protection** — 10-second AbortSignal on all external calls
@@ -324,9 +329,11 @@ src/
 │   ├── ProductSelector.tsx       # Accordion product list
 │   ├── UpdateCard.tsx            # Severity-coded update card
 │   ├── UpdateList.tsx            # Grouped update display
-│   ├── SearchBar.tsx             # NLP search with suggestions (a11y: aria-label, combobox)
+│   ├── SearchBar.tsx             # NLP search with suggestions (a11y + keyboard shortcuts: / to focus, Esc to clear)
 │   ├── ExportButton.tsx          # Excel/PPTX dropdown (a11y: role=menu)
 │   ├── ReasoningTrace.tsx        # Pipeline visualization + CoT steps + evaluation
+│   ├── ErrorBoundary.tsx         # React error boundary with friendly fallback
+│   ├── SkeletonLoader.tsx        # Loading skeleton for update cards
 │   ├── LanguageSelector.tsx      # 8-language switcher
 │   └── PeriodSelector.tsx        # Time range filter
 └── lib/
@@ -343,7 +350,9 @@ src/
 │   │   ├── products.test.ts      # 5 test cases
 │   │   ├── ranking-agent.test.ts # 9 test cases
 │   │   ├── evaluator.test.ts     # 8 test cases
-│   │   └── orchestrator.test.ts  # 8 test cases
+│   │   ├── orchestrator.test.ts  # 8 test cases
+│   │   └── rate-limiter.test.ts  # 5 test cases
+    ├── rate-limiter.ts           # Sliding-window rate limiter
     ├── llm-query-analyzer.ts     # GPT-4o Chain-of-Thought engine
     ├── config.ts                 # Centralized env var management
     ├── logger.ts                 # Structured JSON logging
@@ -367,7 +376,7 @@ This entire project was built using **GitHub Copilot in Agent Mode** within VS C
 4. **Multi-agent system** — Orchestrator-Workers pattern implemented with Copilot guidance
 5. **LLM integration** — Chain-of-Thought reasoning pipeline designed and built with Copilot
 6. **NLP implementation** — Query parser with Japanese/English NLP built with Copilot assistance
-7. **Testing** — 54 unit tests across 5 test files generated with Copilot
+7. **Testing** — 84 unit tests across 9 test files generated with Copilot
 8. **Export features** — ExcelJS and PptxGenJS document generation coded by Copilot
 9. **Error handling** — Retry mechanisms, Zod validation, structured logging added by Copilot
 10. **i18n** — 8-language UI text generated and maintained by Copilot
@@ -378,14 +387,14 @@ This entire project was built using **GitHub Copilot in Agent Mode** within VS C
 
 **Track 1: 🎨 Creative Apps — GitHub Copilot**
 
-| Criteria                            | How This Project Addresses It                                                      |
-| ----------------------------------- | ---------------------------------------------------------------------------------- |
-| **Accuracy & Relevance**            | Real-time Learn API + date-filtered results + relevance scoring + reasoning trace UI |
+| Criteria                            | How This Project Addresses It                                                               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Accuracy & Relevance**            | Real-time Learn API + date-filtered results + relevance scoring + reasoning trace UI        |
 | **Reasoning & Multi-step Thinking** | 5-step Chain-of-Thought, multi-agent orchestration, evaluator-optimizer loop, visible in UI |
-| **Creativity & Originality**        | AI Briefing Summary, Reasoning Trace visualization, multi-lingual TUB viewer |
-| **UX & Presentation**               | Polished UI, accessibility (ARIA), reasoning panel, severity categorization |
-| **Reliability & Safety**            | 79 tests, Zod validation, security headers, structured logging, retry mechanisms |
-| **MCP Integration**                 | Microsoft Learn API via MCP integration pipeline; ready for WorkIQ                 |
+| **Creativity & Originality**        | AI Briefing Summary, Reasoning Trace visualization, multi-lingual TUB viewer                |
+| **UX & Presentation**               | Polished UI, skeleton loader, keyboard shortcuts, a11y (ARIA), reasoning panel            |
+| **Reliability & Safety**            | 84 tests, Zod validation, rate limiting, error boundary, security headers, logging, retry |
+| **MCP Integration**                 | Microsoft Learn API via MCP integration pipeline; ready for WorkIQ                          |
 
 ---
 
