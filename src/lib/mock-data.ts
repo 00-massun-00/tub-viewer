@@ -22,7 +22,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       source: "message-center",
       sourceId: "MC1181915",
       sourceUrl: "https://admin.microsoft.com/AdminPortal/Home#/MessageCenter/:/messages/MC1181915",
-      date: "2025-12-15",
+      date: "2026-02-10",
     },
     {
       id: "mc-fo-license",
@@ -39,8 +39,8 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequiredEn: "Verify upgrade prerequisites for 10.0.44+. Confirm User Security Governance (USG) settings.",
       source: "message-center",
       sourceId: "MC-FO-LIC-2025",
-      date: "2025-09-01",
-      deadline: "2025-11-01",
+      date: "2026-02-05",
+      deadline: "2026-04-01",
     },
     {
       id: "mc-fo-1046",
@@ -56,7 +56,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequired: "LCS の Update Settings と Message Center 通知の連動を確認",
       actionRequiredEn: "Verify LCS Update Settings and Message Center notification integration.",
       source: "message-center",
-      date: "2026-01-15",
+      date: "2026-02-01",
     },
     {
       id: "learn-d365-copilot-fo",
@@ -110,7 +110,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequiredEn: "Evaluate the new UI and verify AI agent capabilities.",
       source: "microsoft-learn",
       sourceUrl: "https://learn.microsoft.com/dynamics365/release-plan/2025wave2/sales/",
-      date: "2025-10-01",
+      date: "2026-02-03",
     },
     {
       id: "mc-field-service-dep",
@@ -127,8 +127,8 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequiredEn: "Migrate to the new Field Service integration experience within Microsoft 365.",
       source: "message-center",
       sourceUrl: "https://learn.microsoft.com/dynamics365/field-service/deprecations-field-service",
-      date: "2025-08-15",
-      deadline: "2025-10-30",
+      date: "2026-01-25",
+      deadline: "2026-04-30",
     },
     {
       id: "mc-field-service-report",
@@ -144,8 +144,8 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequired: "Microsoft Fabric に移行してレポートを再構築",
       actionRequiredEn: "Migrate to Microsoft Fabric and rebuild reports.",
       source: "message-center",
-      date: "2025-06-01",
-      deadline: "2025-08-31",
+      date: "2026-01-20",
+      deadline: "2026-03-31",
     },
   ],
 
@@ -182,7 +182,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequiredEn: "Verify migration to .NET 9 and review runtime updates.",
       source: "microsoft-learn",
       sourceUrl: "https://learn.microsoft.com/azure/azure-functions/functions-versions",
-      date: "2025-11-01",
+      date: "2026-01-28",
     },
     {
       id: "azure-aks-retirement",
@@ -235,7 +235,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequired: "エージェント機能の評価、開発者向けドキュメントの確認",
       actionRequiredEn: "Evaluate agent capabilities and review developer documentation.",
       source: "message-center",
-      date: "2025-11-20",
+      date: "2026-02-08",
     },
     {
       id: "mc-teams-classic-retirement",
@@ -251,8 +251,8 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequired: "全端末で新 Teams クライアントへの移行を完了させる",
       actionRequiredEn: "Complete migration to the new Teams client on all devices.",
       source: "message-center",
-      date: "2025-07-01",
-      deadline: "2026-01-31",
+      date: "2026-01-18",
+      deadline: "2026-03-31",
     },
   ],
 
@@ -289,7 +289,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequiredEn: "Re-evaluate storage capacity and review allocation plans.",
       source: "message-center",
       sourceId: "MC1181915",
-      date: "2025-12-15",
+      date: "2026-02-12",
     },
   ],
 
@@ -308,7 +308,7 @@ export const MOCK_UPDATES: Record<string, UpdateItem[]> = {
       actionRequired: "全管理者アカウントで MFA を有効化",
       actionRequiredEn: "Enable MFA on all administrator accounts.",
       source: "message-center",
-      date: "2025-10-15",
+      date: "2026-01-22",
       deadline: "2026-03-31",
     },
   ],
